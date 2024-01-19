@@ -5,9 +5,12 @@ namespace EventSourcing.Framework
     public interface IEvent
     {
         [JsonIgnore]
-        Guid AggregateId { get; set; }
+        Guid AggregateId { get; }
         [JsonIgnore]
-        int EventVersion { get; set; }
+        int EventVersion { get; }
+        [JsonIgnore]
+        string TypeFullName { get; init; }
+
         void Initialize(Guid aggregateId, int eventVersion);
     }
 }

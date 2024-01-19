@@ -1,4 +1,4 @@
-using EventSourcing.Aggregates;
+﻿using EventSourcing.Aggregates;
 using EventSourcing.Events.AccountEvents;
 using EventSourcing.Framework;
 
@@ -15,35 +15,35 @@ namespace EventSourcing.Tests
             var accountId = Guid.NewGuid();
             var version = 1;
 
-            @event = new AccountCreatedEvent(accountId, "Saed");
+            @event = new AccountCreatedEvent(typeof(AccountCreatedEvent).FullName!, accountId, "Saed");
             @event.Initialize(accountId, version++);
             events.Add(@event);
 
-            @event = new AmountDepositedEvent(accountId, 200);
+            @event = new AmountDepositedEvent(typeof(AmountDepositedEvent).FullName!, accountId, 200);
             @event.Initialize(accountId, version++);
             events.Add(@event);
 
-            @event = new AmountDepositedEvent(accountId, 300);
+            @event = new AmountDepositedEvent(typeof(AmountDepositedEvent).FullName!, accountId, 300);
             @event.Initialize(accountId, version++);
             events.Add(@event);
 
-            @event = new AmountWithdrawnEvent(accountId, 50);
+            @event = new AmountWithdrawnEvent(typeof(AmountWithdrawnEvent).FullName!, accountId, 50);
             @event.Initialize(accountId, version++);
             events.Add(@event);
 
-            @event = new AmountDepositedEvent(accountId, 100);
+            @event = new AmountDepositedEvent(typeof(AmountDepositedEvent).FullName!, accountId, 100);
             @event.Initialize(accountId, version++);
             events.Add(@event);
 
-            @event = new NameChangedEvent(accountId, "Saeed");
+            @event = new NameChangedEvent(typeof(NameChangedEvent).FullName!, accountId, "Saeed");
             @event.Initialize(accountId, version++);
             events.Add(@event);
 
-            @event = new AmountDepositedEvent(accountId, 500);
+            @event = new AmountDepositedEvent(typeof(AmountDepositedEvent).FullName!, accountId, 500);
             @event.Initialize(accountId, version++);
             events.Add(@event);
 
-            @event = new AmountWithdrawnEvent(accountId, 100);
+            @event = new AmountWithdrawnEvent(typeof(AmountWithdrawnEvent).FullName!, accountId, 100);
             @event.Initialize(accountId, version++);
             events.Add(@event);
 

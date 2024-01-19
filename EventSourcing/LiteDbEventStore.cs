@@ -2,7 +2,6 @@
 using EventSourcing.Framework;
 using LiteDB;
 using System.Reflection;
-using System.Text.Json;
 
 namespace EventSourcing
 {
@@ -25,7 +24,7 @@ namespace EventSourcing
             {
                 var collection = db.GetCollection<Event>("events");
 
-                var dbEvents = collection.Query().Where(x => x.Payload.AggregateId == aggregateId).ToList();
+                var dbEvents = collection.Query().Where(x => x.Payload.AggregateId == aggregateId).OrderBy(x=> x.CreatedAt).ToList();
                 var events = dbEvents.Select(x => x.Payload);
 
                 return Task.FromResult(events.ToList());
@@ -34,11 +33,7 @@ namespace EventSourcing
 
         public Task SaveEventsAsync(Guid aggregateId, IEnumerable<IEvent> events)
         {
-            var databaseEvents = events.Select(x => new Event
-            {
-                CreatedAt = DateTime.UtcNow,
-                Payload = x
-            });
+            var databaseEvents = events.Select(x => new Event(x));
             using (var db = new LiteDatabase(_databasePath))
             {
                 var collection = db.GetCollection<Event>("events");

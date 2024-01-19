@@ -8,9 +8,15 @@ namespace EventSourcing.Domains
         public IEvent Payload { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
 
-        public Event()
+        private Event()
         {
             Id = Guid.NewGuid();
+            CreatedAt = DateTimeOffset.UtcNow;
+        }
+
+        public Event(IEvent payload) : this()
+        {
+            Payload = payload;
         }
     }
 }

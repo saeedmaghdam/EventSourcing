@@ -16,10 +16,10 @@ namespace EventSourcing.Aggregates
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            AddEvent(new AccountCreatedEvent(Id, name));
+            AddEvent(new AccountCreatedEvent(typeof(AccountCreatedEvent).FullName!, Id, name));
 
             if (initialBalance > 0)
-                AddEvent(new InitialBalanceSetEvent(Id, initialBalance));
+                AddEvent(new InitialBalanceSetEvent(typeof(InitialBalanceSetEvent).FullName!, Id, initialBalance));
         }
 
         public void UpdateName(string name)
@@ -27,7 +27,7 @@ namespace EventSourcing.Aggregates
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
 
-            AddEvent(new NameChangedEvent(Id, name));
+            AddEvent(new NameChangedEvent(typeof(NameChangedEvent).FullName!, Id, name));
         }
 
         public void Deposit(decimal balance)
@@ -35,7 +35,7 @@ namespace EventSourcing.Aggregates
             if (balance <= 0)
                 throw new ArgumentOutOfRangeException(nameof(balance));
 
-            AddEvent(new AmountDepositedEvent(Id, balance));
+            AddEvent(new AmountDepositedEvent(typeof(AmountDepositedEvent).FullName!, Id, balance));
         }
 
         public void Withdraw(decimal balance)
@@ -43,7 +43,7 @@ namespace EventSourcing.Aggregates
             if (balance <= 0)
                 throw new ArgumentOutOfRangeException(nameof(balance));
 
-            AddEvent(new AmountWithdrawnEvent(Id, balance));
+            AddEvent(new AmountWithdrawnEvent(typeof(AmountWithdrawnEvent).FullName!, Id, balance));
         }
 
         internal void Apply(AccountCreatedEvent @event)

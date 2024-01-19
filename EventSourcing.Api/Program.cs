@@ -1,8 +1,12 @@
+﻿using System.Reflection;
+using System.Text.Json;
 using EventSourcing;
 using EventSourcing.Api.Models.InputModels;
+using EventSourcing.Events.AccountEvents;
 using EventSourcing.Framework;
 using EventSourcing.Services;
 using EventSourcing.Services.Framework;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,12 +32,26 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("/{accountId}", async ([FromRoute] Guid accountId, IAccountService accountService) =>
+app.MapGet("/{accountId}", async ([FromRoute] Guid accountId, IAccountService accountService) =>
 {
     var account = await accountService.GetByIdAsync(accountId);
     return account;
 })
 .WithName("GetAccount");
+
+app.MapGet("/{accountId}/events", async ([FromRoute] Guid accountId, IEventStore eventStore) =>
+{
+    Func<IEvent, string> toJson = @event =>
+    {
+        Assembly asm = Assembly.GetAssembly(typeof(AccountCreatedEvent))!;
+        Type type = asm.GetType(@event.TypeFullName)!;
+        return JsonSerializer.Serialize(@event, type);
+    };
+
+    var events = await eventStore.GetEventsAsync(accountId);
+    return events.Select(x => toJson(x)).ToList();
+})
+.WithName("GetEvents");
 
 app.MapPost("/create-account", async ([FromBody] CreateAccountInputModel model, IAccountService accountService) =>
 {

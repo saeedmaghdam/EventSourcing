@@ -10,18 +10,18 @@ namespace EventSourcing
 
         protected List<IEvent> Events { get; private set; } = new List<IEvent>();
 
-        public AggregateRoot() { }
+        protected AggregateRoot() { }
 
-        public AggregateRoot(Guid id)
+        protected AggregateRoot(Guid id)
         {
             Id = id;
 
             Events = new List<IEvent>();
         }
 
-        public AggregateRoot(Guid id, int version) : this(id) { }
+        protected AggregateRoot(Guid id, int version) : this(id) { }
 
-        public IEnumerable<IEvent> GetEvents() => Events;
+        public IEnumerable<IEvent> GetEvents() => Events.ToList();
 
         protected void AddEvent(IEvent @event)
         {
